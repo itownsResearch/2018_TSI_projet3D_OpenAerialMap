@@ -1,0 +1,3 @@
+[submodule "itowns"]
+	path = itowns
+	url = https://github.com/iTowns/itowns.git
