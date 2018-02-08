@@ -36,10 +36,10 @@
     </head>
     <body>
         <div id="viewerDiv"></div>
-        <script src="itowns/examples/GUI/dat.gui/dat.gui.min.js"></script>
-        <script src="itowns/examples/GUI/GuiTools.js"></script>
-        <script src="itowns/dist/itowns.js"></script>
-        <script src="itowns/dist/debug.js"></script>
+        <script src="node_modules/itowns/examples/GUI/dat.gui/dat.gui.min.js"></script>
+        <script src="node_modules/itowns/examples/GUI/GuiTools.js"></script>
+        <script src="node_modules/itowns/dist/itowns.js"></script>
+        <script src="node_modules/itowns/dist/debug.js"></script>
         <script type="text/javascript">
             var renderer;
             var exports = {};
@@ -50,10 +50,10 @@
 
             var menuGlobe = new GuiTools('menuDiv');
             menuGlobe.view = globeView;
-              //globeView.controls.setZoom(2, true);
-          //  globeView.controls.setZoom(2, true);
+            
             // Listen for globe full initialisation event
-
+            
+             
             const d = new debug.Debug(globeView, menuGlobe.gui);
             debug.createTileDebugUI(menuGlobe.gui, globeView, globeView.wgs84TileLayer, d);
 
