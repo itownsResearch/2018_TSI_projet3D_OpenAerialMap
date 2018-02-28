@@ -1,0 +1,110 @@
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Click to 3D three.js - simple</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<style>
+			body {
+				font-family: Monospace;
+				background-color: green;
+				margin: 0px;
+				overflow: hidden;
+			}
+		</style>
+	</head>
+	<body>
+
+        <script src="http://barkofthebyte.azurewebsites.net/Scripts/conc/three.js"></script>
+
+
+		<script>
+
+
+		var container;
+		var camera, scene, projector, renderer;
+		var particleMaterial;
+					var viewWidth = window.innerWidth;
+					var viewHeight = window.innerHeight;
+					var cameraOffset = window.innerWidth;
+		var objects = [];
+		init();
+
+		function init() {
+
+			container = document.createElement( 'div' );
+			document.body.appendChild( container );
+
+			camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 10000 );
+			camera.position.set( 0, 0, cameraOffset );
+
+			scene = new THREE.Scene();
+
+			var geometry = new THREE.BoxGeometry( 100, 100, 100 );
+
+
+			for ( var i = 0; i < 10; i ++ )
+			{
+					var object = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial( { color: Math.random() * 0xffffff, opacity: 0.5 } ) );
+					object.position.x = Math.random() * 800 - 400;
+					object.position.y = Math.random() * 800 - 400;
+					object.position.z = Math.random() * 800 - 400;
+					object.rotation.x = Math.random() * 2 * Math.PI;
+					object.rotation.y = Math.random() * 2 * Math.PI;
+					object.rotation.z = Math.random() * 2 * Math.PI;
+					object.scale.x = Math.random() + 0.5;
+					object.scale.y = Math.random() + 0.5;
+					object.scale.z = Math.random() + 0.5;
+					scene.add( object );
+					objects.push( object );
+				}
+
+
+
+
+
+
+			projector = new THREE.Projector();
+
+			renderer = new THREE.CanvasRenderer();
+			renderer.setClearColor( 0xf0f0f0 );
+			renderer.setSize( viewWidth, viewHeight );
+
+			container.appendChild( renderer.domElement );
+
+			document.addEventListener( 'mousedown', onDocumentMouseDown, false );
+
+
+			camera.lookAt(new THREE.Vector3(0,0,0));
+			render();
+		}
+
+
+
+					function onDocumentMouseDown( event ) {
+							var mouse3D = new THREE.Vector3( ( event.clientX / window.innerWidth ) * 2 - 1,   //x
+																							-( event.clientY / window.innerHeight ) * 2 + 1,  //y
+																							0.5 );                                            //z
+							projector.unprojectVector( mouse3D, camera );
+							mouse3D.sub( camera.position );
+							mouse3D.normalize();
+							console.log(scene);
+							var raycaster = new THREE.Raycaster( camera.position, mouse3D );
+							var intersects = raycaster.intersectObjects( scene.children );
+							// Change color if hit block
+							if ( intersects.length > 0 ) {
+									intersects[ 0 ].object.material.color.setHex( Math.random() * 0xffffff );
+							}
+							render();
+					}
+
+		function render() {
+			renderer.render( scene, camera );
+		}
+
+
+		</script>
+
+	</body>
+</html>
