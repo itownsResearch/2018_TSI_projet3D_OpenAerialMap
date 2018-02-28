@@ -1,34 +1,22 @@
 var container;
-var renderer,camera, projector;
+var renderer, projector;
 
 var viewWidth = window.innerWidth;
 var viewHeight = window.innerHeight;
 var cameraOffset = window.innerWidth;
 var objectsLists = [];
+
 // Position near Gerbier mountain.
+var ray, mouse;
 
 
-
-const positionOnGlobe = { longitude: 2.351323, latitude: 48.856712, altitude: 400000};
+const positionOnGlobe = { longitude: 0, latitude: 0, altitude: 4005000};
 
 // `viewerDiv` will contain iTowns' rendering area (`<canvas>`)
 var viewerDiv = document.getElementById('viewerDiv');
 // Instanciate iTowns GlobeView*
 var globeView = new itowns.GlobeView(viewerDiv, positionOnGlobe, renderer);
 
-
-camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 10000 );
-
-
-var camLocation =  globeView.controls.getCameraLocation();
-var xyz = camLocation.as(globeView.referenceCrs).xyz();
-camera.position.x = xyz.x ;
-camera.position.y = xyz.y;
-camera.position.z = xyz.z;
-
-console.log(globeView);
-//globeView.scene.add(camera);
-camera.lookAt(globeView.scene.position);
 var promises = [];
 
 var menuGlobe = new GuiTools('menuDiv');
@@ -63,7 +51,6 @@ function displayOrthos()
         var properties = data.results[i].properties;
         addMeshToScene(bbox,coords,properties);
       }
-          render();
     });
 }
 
@@ -90,19 +77,16 @@ function addMeshToScene(bbox,coords,properties) {
 
     var texture  = loader.load(properties.thumbnail);
     var material = new THREE.MeshBasicMaterial({ map: texture,side:THREE.DoubleSide });
-    //var material = new THREE.MeshBasicMaterial({ color: 0xff0000,side:THREE.DoubleSide });
     var mesh = new THREE.Mesh(geometry, material);
 
     var imCoords = new itowns.Coordinates('EPSG:4326',coords[0][0] , coords[0][1],0);
+
     // get the position on the globe, from the camera
-
-    var xyz = imCoords.as('EPSG:4978').xyz();
-
     var cameraTargetPosition = globeView.controls.getCameraTargetGeoPosition();
 
     // position of the mesh
     var meshCoord = imCoords;
-    meshCoord.setAltitude(cameraTargetPosition.altitude()+100000);
+    meshCoord.setAltitude(cameraTargetPosition.altitude()+100);
 
     // position and orientation of the mesh
     mesh.position.copy(meshCoord.as(globeView.referenceCrs).xyz());
@@ -124,7 +108,6 @@ function addMeshToScene(bbox,coords,properties) {
     //globeView.mesh = mesh;
 }
 
-var mouse = new THREE.Vector2();
 
 function onDocumentMouseDown( event ) {
 
@@ -133,32 +116,23 @@ function onDocumentMouseDown( event ) {
     mouse.x = ( event.clientX / renderer.domElement.clientWidth ) * 2 - 1;
     mouse.y = - ( event.clientY / renderer.domElement.clientHeight ) * 2 + 1;
 
-    console.log(mouse.x,mouse.y);
     var vector = new THREE.Vector3( mouse.x, mouse.y, 1 );
-    projector.unprojectVector( vector, camera );
-    var ray = new THREE.Raycaster( camera.position, camera.position.sub( vector ).normalize() );
+
+    ray.setFromCamera( mouse, globeView.camera.camera3D );
 
     var intersects = ray.intersectObjects( objectsLists );
 
-    console.log("Camera Position ", camera.position);
-    console.log("Globe camera position", globeView.controls.getCameraLocation());
-    console.log("Globe norm", camera.position.sub( vector ).normalize());
-    console.log("Globe", camera.position.sub( vector ).normalize());
     console.log("intersects list", intersects );
-    //chromium-browser --disable-web-security --user-data-dir
 
     // Change color if hit block
     if ( intersects.length > 0 )
     {
-        intersects[ 0 ].object.material.color.setHex( Math.random() * 0xffffff );
+      console.log(intersects[ 0 ].object);
+        //intersects[ 0 ].object.material.color.setHex( Math.random() * 0xffffff );
     }
-    render();
+
 }
 
-function render()
-{
-  renderer.render( globeView.scene, camera );
-}
 
 // Listen for globe full initialisation event
 globeView.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function () {
@@ -180,12 +154,9 @@ globeView.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function 
 
         projector = new THREE.Projector();
 
-
+         ray = new THREE.Raycaster();
+         mouse = new THREE.Vector2();
         document.addEventListener( 'mousedown', onDocumentMouseDown, false );
-
-
-        camera.lookAt(new THREE.Vector3(0,0,0));
-        render();
 
         globeView.controls.setTilt(10, true);
     });
