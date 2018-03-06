@@ -7,6 +7,7 @@ Ce projet consiste à remplacer le viewer 2D OAM-browser par le viewer 3D iTowns
 **2ème étape :** Localiser les orthophotos sur le viewer d'iTowns à travers leurs coordonnées.
 
 **3ème étape :** Ajouter un événement click sur les imagettes des *ortho*.
+
 **4ème étape :** Affichage de l'ortho sur le viewer d'iTowns.
 
 
@@ -22,8 +23,11 @@ Ce projet consiste à remplacer le viewer 2D OAM-browser par le viewer 3D iTowns
 
 # Ce qui marche
 :heavy_check_mark: ***Étape 1***
+
 :heavy_check_mark: ***Étape 2***
+
 :heavy_check_mark: ***Étape 3***
+
 :x: ***Étape 4*** Bug actuel sur l'ajout de l'orthophotos.
 
 
