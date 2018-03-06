@@ -1,6 +1,6 @@
 var container;
 var renderer, projector;
-
+var idNum = 0;
 var viewWidth = window.innerWidth;
 var viewHeight = window.innerHeight;
 var cameraOffset = window.innerWidth;
@@ -25,6 +25,7 @@ menuGlobe.view = globeView;
 
 
 function addLayerCb(layer) {
+
     return globeView.addLayer(layer);
 }
 // Add one imagery layer to the scene
@@ -49,12 +50,13 @@ function displayOrthos()
         var bbox = data.results[i].bbox;
         var coords = data.results[i].geojson.coordinates[0];
         var properties = data.results[i].properties;
-        addMeshToScene(bbox,coords,properties);
+
+        addMeshToScene(bbox,coords,properties,data.results[i].title);
       }
     });
 }
 
-function addMeshToScene(bbox,coords,properties) {
+function addMeshToScene(bbox,coords,properties,title) {
     // creation of the new mesh (a cylinder)
     var lat1 = bbox[0];
     var long1 = bbox[1];
@@ -96,6 +98,9 @@ function addMeshToScene(bbox,coords,properties) {
     // update coordinate of the mesh
     mesh.updateMatrixWorld();
 
+    console.log("propriétés",properties);
+    mesh.propriete=properties;
+    mesh.title=title;
 
     // add the mesh to the scene
     globeView.scene.add(mesh);
@@ -127,11 +132,39 @@ function onDocumentMouseDown( event ) {
     // Change color if hit block
     if ( intersects.length > 0 )
     {
-      console.log(intersects[ 0 ].object);
-        //intersects[ 0 ].object.material.color.setHex( Math.random() * 0xffffff );
-    }
+      console.log(intersects[ 0 ].object.propriete.wmts);
 
-}
+        // Example to add an OPENSM Layer
+        globeView.addLayer({
+              update: itowns.FeatureProcessing.update,
+              protocol: "wmts",
+              id:"myLayer"+idNum,
+              url:""+intersects[ 0 ].object.propriete.wmts+"",
+              updateStrategy: {
+                  type: "0",
+                  options: {}
+              },
+              options: {
+              attribution: {
+                    name:"IGN",
+                    url:"http://www.ign.fr/"
+              },
+              name: intersects[ 0 ].object.title,
+              mimetype: "image/png",
+              tileMatrixSet: "PM",
+              tileMatrixSetLimits: [{
+                      minTileRow : 4,
+                      maxTileRow : 8,
+                      minTileCol : 4,
+                      maxTileCol : 8
+              }]
+        }
+      }).then(addLayerCb).then(res=>{idNum++;console.log(idNum);});
+            }
+
+        }
+
+
 
 
 // Listen for globe full initialisation event
