@@ -134,11 +134,11 @@ function onDocumentMouseDown( event ) {
     {
       console.log(intersects[ 0 ].object.propriete.wmts);
 
-        // Example to add an OPENSM Layer
+        // Ajout du wmts sur le viewer
         globeView.addLayer({
               update: itowns.FeatureProcessing.update,
               protocol: "wmts",
-              id:"myLayer"+idNum,
+              id:"layer"+idNum,
               url:""+intersects[ 0 ].object.propriete.wmts+"",
               updateStrategy: {
                   type: "0",
@@ -146,8 +146,8 @@ function onDocumentMouseDown( event ) {
               },
               options: {
               attribution: {
-                    name:"IGN",
-                    url:"http://www.ign.fr/"
+                    name:"openaerialmap",
+                    url:"https://api.openaerialmap.org"
               },
               name: intersects[ 0 ].object.title,
               mimetype: "image/png",

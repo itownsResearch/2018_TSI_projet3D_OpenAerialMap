@@ -5,7 +5,8 @@
   "main": "index.js",
   "dependencies": {
     "http-server": "^0.11.1",
-    "itowns": "^2.2.0"
+    "itowns": "^2.2.0",
+    "ngrok": "^3.0.0"
   },
   "devDependencies": {},
   "scripts": {
