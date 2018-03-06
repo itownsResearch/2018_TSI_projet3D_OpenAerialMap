@@ -128,7 +128,7 @@ function onDocumentMouseDown( event ) {
     var intersects = ray.intersectObjects( objectsLists );
 
     console.log("intersects list", intersects );
-
+     idNum = Math.floor(Math.random() * 11);
     // Change color if hit block
     if ( intersects.length > 0 )
     {
@@ -140,10 +140,6 @@ function onDocumentMouseDown( event ) {
               protocol: "wmts",
               id:"layer"+idNum,
               url:""+intersects[ 0 ].object.propriete.wmts+"",
-              updateStrategy: {
-                  type: "0",
-                  options: {}
-              },
               options: {
               attribution: {
                     name:"openaerialmap",

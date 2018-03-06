@@ -33,5 +33,8 @@ Ce projet consiste à remplacer le viewer 2D OAM-browser par le viewer 3D iTowns
 
 # Problèmes rencontrés
 
-Dans un premier temps nous avons eu des problèmes sur les requêtes HTTP-DE type Cross-site pour le chargement des ressources localisées sur l'API. Nous avons pu régler ce dernier en lançons chrome sans les paramètres de sécurité. Dans un second temps une fois les données récupérées de l'api, nous avons eu des problèmes pour gérer les clicks sur les Orthos qui ont été superposé sur itowns. malheursement une fois le problème réglé, nous avons Pa sut la marche à suivre pour la suite de projet. 
+Dans un premier temps nous avons eu des problèmes sur les requêtes HTTP-DE type Cross-site pour le chargement des ressources localisées sur l'API. Nous avons pu régler ce dernier en lançons chrome sans les paramètres de sécurité. Dans un second temps une fois les données récupérées de l'api, nous avons eu des problèmes pour gérer les clicks sur les Orthos qui ont été superposé sur itowns.  malheursement une fois le problème réglé, nous nous sommes retrouvés face à un nouveau bug sur l'ajout des orthos dans la scene.
+
+Le bug actuel concerne un conflit d'ID de layer comme indiqué sur la figure ci-dessous. 
+!(images/error.jpg?raw=true "error") 
 
