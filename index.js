@@ -31,11 +31,11 @@ function addLayerCb(layer) {
 // Add one imagery layer to the scene
 // This layer is defined in a json file but it could be defined as a plain js
 // object. See Layer* for more info.
-promises.push(itowns.Fetcher.json('https://www.itowns-project.org/itowns/examples/layers/JSONLayers/Ortho.json').then(addLayerCb));
+promises.push(itowns.Fetcher.json('layers/Ortho.json').then(addLayerCb));
 // Add two elevation layers.
 // These will deform iTowns globe geometry to represent terrain elevation.
-promises.push(itowns.Fetcher.json('https://www.itowns-project.org/itowns/examples/layers/JSONLayers/WORLD_DTM.json').then(addLayerCb));
-promises.push(itowns.Fetcher.json('https://www.itowns-project.org/itowns/examples/layers/JSONLayers/IGN_MNT_HIGHRES.json').then(addLayerCb));
+promises.push(itowns.Fetcher.json('layers/WORLD_DTM.json').then(addLayerCb));
+//promises.push(itowns.Fetcher.json('https://www.itowns-project.org/itowns/examples/layers/JSONLayers/IGN_MNT_HIGHRES.json').then(addLayerCb));
 
 exports.view = globeView;
 exports.initialPosition = positionOnGlobe;
